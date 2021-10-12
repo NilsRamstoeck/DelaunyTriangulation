@@ -80,6 +80,7 @@ void draw() {
   for (Triangle t : pMesh.triangles) {
     ArrayList<Edge> edges = t.getEdges();
     for (Edge e : edges) {
+      //e = edges.get(0);
       if (PointEdgeCollider.collides(new PVector(mouseX, mouseY), e) && (selectE1 || selectE2)) {
         if (selectE1 && released && mousePressed) {
           E1 = e;
@@ -103,11 +104,11 @@ void draw() {
 
     //get center of edge
     for (Edge e : edges) {
-
+      //e = edges.get(0);
       double x = (e.v1.x + e.v2.x) / 2;
       double y = x * slope(e) + yintercept(e);
 
-      double m = -slope(e);
+      double m = -1 / slope(e);
       double b = yintercept(m, new Vertex(x, y));
 
 
