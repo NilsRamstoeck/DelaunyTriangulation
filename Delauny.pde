@@ -47,6 +47,14 @@ void line(double x1, double y1, double x2, double y2) {
 void draw() {
   background(0);
 
+  stroke(255, 0, 0);
+  strokeWeight(0.3);
+  if (keyPressed && key == 's')
+    for (Edge e : rejected) {
+      line(e.v1.x, e.v1.y, e.v2.x, e.v2.y);
+    }
+
+
   strokeWeight(5);
   for (Vertex v : vertecies) {
     if (dist(mouseX, mouseY, (float)v.x, (float)v.y) < 15 && (selectV1 || selectV2)) {
@@ -68,9 +76,10 @@ void draw() {
     point(v.x, v.y);
   }
 
-  strokeWeight(.5);
+  strokeWeight(1);
   for (Triangle t : pMesh.triangles) {
-    for (Edge e : t.getEdges()) {
+    ArrayList<Edge> edges = t.getEdges();
+    for (Edge e : edges) {
       if (PointEdgeCollider.collides(new PVector(mouseX, mouseY), e) && (selectE1 || selectE2)) {
         if (selectE1 && released && mousePressed) {
           E1 = e;
@@ -89,16 +98,29 @@ void draw() {
         stroke(255);
       }
 
-      line((float)e.v1.x, (float)e.v1.y, (float)e.v2.x, (float)e.v2.y);
-    }
-  }
-
-  stroke(255, 0, 0);
-
-  if (keyPressed && key == 's')
-    for (Edge e : rejected) {
       line(e.v1.x, e.v1.y, e.v2.x, e.v2.y);
     }
+
+    //get center of edge
+    for (Edge e : edges) {
+
+      double x = (e.v1.x + e.v2.x) / 2;
+      double y = x * slope(e) + yintercept(e);
+
+      double m = -slope(e);
+      double b = yintercept(m, new Vertex(x, y));
+
+
+      Vertex v = edges.get(0).v1;
+
+      //m *= -1;
+
+      int off = 1000;
+
+      line((x - off), (x - off) * m + b, (x + off), (x + off) * m + b); 
+      println((x - off), (x - off) * m + b, (x + off), (x + off) * m + b);
+    }
+  }
 }
 
 void mouseReleased() {

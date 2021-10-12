@@ -4,7 +4,7 @@ static class Vertex{
   
   //ArrayList<Edge> edges = new ArrayList();
   
-  Vertex(float _x, double _y){
+  Vertex(double _x, double _y){
     this.x = _x;
     this.y = _y;
   }

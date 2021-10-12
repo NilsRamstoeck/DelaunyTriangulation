@@ -1,18 +1,28 @@
 
-private static double round(double val, int digits) {
+
+
+static double round(double val, int digits) {
   double factor = (int)pow(10, digits);
   return (double)Math.round(val * factor) / factor;
 }
 
-private static double slope(Vertex a, Vertex b) {
+static double slope(Vertex a, Vertex b) {
   return (b.y - a.y) / (b.x - a.x);
 }
 
-private static double yintercept(double m, Vertex p) {
+static double slope(Edge e){
+ return slope(e.v1, e.v2); 
+}
+
+static double yintercept(Edge e){
+ return yintercept(slope(e), e.v1); 
+}
+
+static double yintercept(double m, Vertex p) {
   return  p.y - (m * p.x);
 }
 
-private static boolean intersects(Edge a, Edge b) {
+static boolean intersects(Edge a, Edge b) {
   //find slopes
   double m1 = slope(a.v1, a.v2);
   double m2 = slope(b.v1, b.v2);
