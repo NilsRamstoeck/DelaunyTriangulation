@@ -1,4 +1,18 @@
+static PVector getIntersection(double m1, double b1, double m2, double b2) {
 
+  //if not parallel
+  if (m1 != m2) {
+
+
+    //get x of intersection
+    double x = round((b2 - b1) / (m1 - m2), 5);
+
+    double y = m1 * x + b1;
+
+    return new PVector((float)x, (float)y);
+  }
+  return null;
+}
 
 
 static double round(double val, int digits) {
@@ -10,12 +24,12 @@ static double slope(Vertex a, Vertex b) {
   return (b.y - a.y) / (b.x - a.x);
 }
 
-static double slope(Edge e){
- return slope(e.v1, e.v2); 
+static double slope(Edge e) {
+  return slope(e.v1, e.v2);
 }
 
-static double yintercept(Edge e){
- return yintercept(slope(e), e.v1); 
+static double yintercept(Edge e) {
+  return yintercept(slope(e), e.v1);
 }
 
 static double yintercept(double m, Vertex p) {

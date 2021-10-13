@@ -4,7 +4,7 @@ static ArrayList<Edge> rejected = new ArrayList();
 
 ArrayList<Vertex> vertecies = new ArrayList();
 
-int amtV = 3;
+int amtV = 5;
 
 boolean selectV1 = false, selectV2 = false, selectE1 = false, selectE2 = false;
 boolean released = true;
@@ -34,6 +34,8 @@ void setup() {
   println("START");
   //dMesh = DelaunyTriangulation.delauny(vertecies);
   println("DONE");
+  
+  noFill();
 }
 
 void point(double x, double y) {
@@ -49,7 +51,7 @@ void draw() {
 
   stroke(255, 0, 0);
   strokeWeight(0.3);
-  if (keyPressed && key == 's')
+  //if (keyPressed && key == 's')
     for (Edge e : rejected) {
       line(e.v1.x, e.v1.y, e.v2.x, e.v2.y);
     }
@@ -102,6 +104,8 @@ void draw() {
       line(e.v1.x, e.v1.y, e.v2.x, e.v2.y);
     }
 
+    ArrayList<PVector> lines = new ArrayList();
+
     //get center of edge
     for (Edge e : edges) {
       //e = edges.get(0);
@@ -111,16 +115,30 @@ void draw() {
       double m = -1 / slope(e);
       double b = yintercept(m, new Vertex(x, y));
 
+      lines.add(new PVector((float)m, (float)b));
 
-      Vertex v = edges.get(0).v1;
+      //Vertex v = edges.get(0).v1;
 
       //m *= -1;
 
-      int off = 1000;
-
-      line((x - off), (x - off) * m + b, (x + off), (x + off) * m + b); 
-      println((x - off), (x - off) * m + b, (x + off), (x + off) * m + b);
+      //int off = 1000;
+  
+      //line((x - off), (x - off) * m + b, (x + off), (x + off) * m + b); 
+      //println((x - off), (x - off) * m + b, (x + off), (x + off) * m + b);
     }
+    
+    
+      PVector intersection = getIntersection(lines.get(0).x, lines.get(0).y, lines.get(1).x, lines.get(1).y);
+    
+      stroke(255, 255, 0);
+      circle(intersection.x, intersection.y, dist(intersection.x, intersection.y, (float)edges.get(0).v1.x, (float)edges.get(0).v1.y)*2);
+
+  }
+  
+  if(true)return;
+  for(Vertex v : vertecies){
+   v.x += random(-1, 1); 
+   v.y += random(-1, 1); 
   }
 }
 

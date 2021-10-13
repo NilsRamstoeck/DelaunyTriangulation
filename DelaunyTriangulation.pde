@@ -1,5 +1,5 @@
 static class DelaunyTriangulation {
-  
+
   public static Mesh divideAndConquer(ArrayList<Vertex> vertecies) {
 
     return null;
@@ -10,21 +10,21 @@ static class DelaunyTriangulation {
     return null;
   }
 
-  public static Mesh delauny(ArrayList<Vertex> vertecies){
+  public static Mesh delauny(ArrayList<Vertex> vertecies) {
     Mesh m = crudeTriangulation(vertecies);
-    
+
     boolean done = false;
-    
-    while(!done){
-     // for(Trian
+
+    while (!done) {
+      // for(Trian
     }
-    
-    return m; 
+
+    return m;
   }
 
   public static void flip(Edge e) {
     //get all triangles that have this edge
-    
+    println(e.tris.size());
   }
 
   public static Mesh crudeTriangulation(ArrayList<Vertex> vertecies) {
@@ -60,6 +60,7 @@ static class DelaunyTriangulation {
     for (int i = 3; i < vertecies.size(); i++) {
       Vertex v = vertecies.get(i);
       ArrayList<Edge> viable = new ArrayList();
+      //ArrayList<Edge> t = new ArrayList();
 
       for (int j = i-1; j >= 0; j--) {
         Vertex lastV = vertecies.get(j);
@@ -81,7 +82,19 @@ static class DelaunyTriangulation {
         Edge a = viable.get(j);
         Edge b = viable.get(j+1);
         Edge c = new Edge(a.v1, a.v2);
+
         m.addTriangle(new Triangle(a, b, c));
+      }
+    }
+
+    for (Edge e1 : m.getEdges()) {
+      for (Edge e2 : m.getEdges()) {
+        if(e1 != e2){
+         if(e1.v1 == e2.v1 && e1.v2 == e2.v2){
+          //replcae e2 with reference to e1
+          println("BAZINGA!"); 
+         }
+        }
       }
     }
 
