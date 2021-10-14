@@ -4,7 +4,7 @@ static ArrayList<Edge> rejected = new ArrayList();
 
 ArrayList<Vertex> vertecies = new ArrayList();
 
-int amtV = 5;
+int amtV = 10;
 
 boolean selectV1 = false, selectV2 = false, selectE1 = false, selectE2 = false;
 boolean released = true;

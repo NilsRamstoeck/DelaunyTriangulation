@@ -81,20 +81,23 @@ static class DelaunyTriangulation {
       for (int j = 0; j < viable.size() - 1; j++) {
         Edge a = viable.get(j);
         Edge b = viable.get(j+1);
-        Edge c = new Edge(a.v1, a.v2);
+        Edge c = new Edge(a.v1, b.v1);
 
-        m.addTriangle(new Triangle(a, b, c));
-      }
-    }
+        for (Edge e : m.getEdges()) {
+          println(e.v1, e.v2);
+          println(a.v1, a.v2);
+          println(b.v1, b.v2);
 
-    for (Edge e1 : m.getEdges()) {
-      for (Edge e2 : m.getEdges()) {
-        if(e1 != e2){
-         if(e1.v1 == e2.v1 && e1.v2 == e2.v2){
-          //replcae e2 with reference to e1
-          println("BAZINGA!"); 
-         }
+          if (((e.v1 == a.v2 || e.v1 == b.v2) && (e.v2 == a.v2 || e.v2 == b.v2)) || (e.v1 == a.v1 || e.v1 == b.v1) && (e.v2 == a.v1 || e.v2 == b.v1)) {
+            println("SUCCESS");
+            c = e;
+            break;
+          }
+
+          println("__________________");
         }
+        println("NEWEDGE");
+        m.addTriangle(new Triangle(a, b, c));
       }
     }
 

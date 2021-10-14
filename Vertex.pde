@@ -12,4 +12,8 @@ static class Vertex{
   public static Edge getSharedEdge(Vertex a, Vertex b){
     return null;
   }
+  
+  public String toString(){
+   return new PVector((float)x, (float)y).toString(); 
+  }
 }
