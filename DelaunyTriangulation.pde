@@ -5,102 +5,93 @@ static class DelaunyTriangulation {
     return null;
   }
 
-  public static Mesh increment(Mesh mesh, Vertex v) {
+  public static void increment(Mesh m, Vertex v) {
+    m.vertecies.add(v);
 
-    return null;
+    if (m.vertecies.size() <  3) {
+      return;
+    } 
+    if (m.vertecies.size() == 3) {
+      Edge a = new Edge(m.vertecies.get(0), m.vertecies.get(1));
+      Edge b = new Edge(m.vertecies.get(1), m.vertecies.get(2));
+      Edge c = new Edge(m.vertecies.get(2), m.vertecies.get(0));
+
+      m.addTriangle(new Triangle(a, b, c));
+    } else {
+      boolean inside = false;
+      for (Triangle t : m.triangles) {
+        PVector circle = t.getCircumcircle();
+        inside |= (dist((float)v.x, (float)v.y, circle.x, circle.y) < circle.z);
+      }
+      if (!inside) {  
+        println("INSIDE");
+        addToAllVisible(m, v);
+      } else {
+        println("WEIRDTHING");
+        
+      }
+    }
   }
 
-  public static Mesh delauny(ArrayList<Vertex> vertecies) {
-    Mesh m = crudeTriangulation(vertecies);
+  private static void addToAllVisible(Mesh m, Vertex v) {
+    ArrayList<Edge> viable = new ArrayList();
+    //ArrayList<Edge> t = new ArrayList();
 
-    boolean done = false;
-
-    while (!done) {
-      // for(Trian
+    for (int j = m.vertecies.size() - 2; j >= 0; j--) {
+      Vertex lastV = m.vertecies.get(j);
+      Edge newEdge = new Edge(v, lastV);
+      boolean intersects = false;
+      for (Edge existingEdge : m.getEdges()) {
+        if (intersects(existingEdge, newEdge)) {
+          intersects = true;
+          rejected.add(newEdge);
+          break;
+        }
+      }
+      if (!intersects) {
+        viable.add(newEdge);
+      }
     }
 
-    return m;
+    for (int j = 0; j < viable.size() - 1; j++) {
+      Edge a = viable.get(j);
+      Edge b = viable.get(j+1);
+      Edge c = new Edge(a.v1, b.v1);
+
+      for (Edge e : m.getEdges()) {
+        //println(e.v1, e.v2);
+        //println(a.v1, a.v2);
+        //println(b.v1, b.v2);
+
+        if (((e.v1 == a.v2 || e.v1 == b.v2) && (e.v2 == a.v2 || e.v2 == b.v2)) || (e.v1 == a.v1 || e.v1 == b.v1) && (e.v2 == a.v1 || e.v2 == b.v1)) {
+          //println("SUCCESS");
+          c = e;
+          break;
+        }
+
+        //println("__________________");
+      }
+      //println("NEWEDGE");
+      Triangle t = new Triangle(a, b, c);
+      PVector circle = t.getCircumcircle();
+      boolean valid = true;
+      for(Vertex otherV : m.vertecies){
+        if(t.getVertecies().contains(otherV))continue;
+        if((dist((float)otherV.x, (float)otherV.y, circle.x, circle.y) < circle.z)){
+          valid = false;
+          break;
+        }
+      }
+      if(valid)
+      m.addTriangle(t);
+      else
+      rejectedT.add(t);
+      //println(valid);
+    }
   }
 
   public static void flip(Edge e) {
     //get all triangles that have this edge
     println(e.tris.size());
-  }
-
-  public static Mesh crudeTriangulation(ArrayList<Vertex> vertecies) {
-
-    vertecies.sort(new Comparator<Vertex>() {
-
-      @Override
-        public int compare(Vertex v1, Vertex v2) {
-        int r;
-        if (v1.x < v2.x) {
-          r = -1;
-        } else if (v1.x > v2.x) {
-          r = 1;
-        } else {
-          r = 0;
-        }
-        return r;
-      }
-    }
-    );
-
-    Mesh m = new Mesh();
-
-    {
-      Edge a = new Edge(vertecies.get(0), vertecies.get(1));
-      Edge b = new Edge(vertecies.get(1), vertecies.get(2));
-      Edge c = new Edge(vertecies.get(2), vertecies.get(0));
-
-      Triangle t = new Triangle(a, b, c);
-      m.addTriangle(t);
-    }
-
-    for (int i = 3; i < vertecies.size(); i++) {
-      Vertex v = vertecies.get(i);
-      ArrayList<Edge> viable = new ArrayList();
-      //ArrayList<Edge> t = new ArrayList();
-
-      for (int j = i-1; j >= 0; j--) {
-        Vertex lastV = vertecies.get(j);
-        Edge newEdge = new Edge(v, lastV);
-        boolean intersects = false;
-        for (Edge existingEdge : m.getEdges()) {
-          if (intersects(existingEdge, newEdge)) {
-            intersects = true;
-            rejected.add(newEdge);
-            break;
-          }
-        }
-        if (!intersects) {
-          viable.add(newEdge);
-        }
-      }
-
-      for (int j = 0; j < viable.size() - 1; j++) {
-        Edge a = viable.get(j);
-        Edge b = viable.get(j+1);
-        Edge c = new Edge(a.v1, b.v1);
-
-        for (Edge e : m.getEdges()) {
-          println(e.v1, e.v2);
-          println(a.v1, a.v2);
-          println(b.v1, b.v2);
-
-          if (((e.v1 == a.v2 || e.v1 == b.v2) && (e.v2 == a.v2 || e.v2 == b.v2)) || (e.v1 == a.v1 || e.v1 == b.v1) && (e.v2 == a.v1 || e.v2 == b.v1)) {
-            println("SUCCESS");
-            c = e;
-            break;
-          }
-
-          println("__________________");
-        }
-        println("NEWEDGE");
-        m.addTriangle(new Triangle(a, b, c));
-      }
-    }
-
-    return m;
   }
 }

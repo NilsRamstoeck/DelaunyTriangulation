@@ -21,7 +21,7 @@ static class Mesh {
     ArrayList<Edge> edges = new ArrayList();
     for (Triangle t : triangles) {
       for (Edge e : t.getEdges()) {
-        edges.add(e);
+        if(!edges.contains(e))edges.add(e);
       }
     }
     return edges;
